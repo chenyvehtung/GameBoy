@@ -10,51 +10,57 @@ string gameName[GameNum] = {
     "Tetris"
 };
 
-void printMenu(GameBoyIO gameBoyIO, int highlight);
+void printMenu(GB_WINDOW* gbWin, int highlight);
 
 int main(int argc, char const *argv[])
 {
-    GameBoyIO gameBoyIO;
-    GB_WINDOW* mainWin = gameBoyIO.gbGetWinLocate(MAIN_WIN);
+    GameBoyIO::getInstance().initGameBoy();
+    
+    GameBoyIO::getInstance().printGameBorder();
+    GB_WINDOW* mainWin = GameBoyIO::getInstance().getWinLocate(MAIN_WIN);  
     int highlight = 1;
     int choice = 0;
-    printMenu(gameBoyIO, highlight);
+    printMenu(mainWin, highlight);
+    
     while(1) {
-        choice = GB_getch(mainWin);
+        GameBoyIO::getInstance().printGameBorder();
+        choice = wgetch(mainWin->win);
         switch(choice) {
-            case GB_KEY_UP:
+            case KEY_UP:
                 if (highlight == 1) {
-                    highlight = GameNum - 1;
+                    highlight = GameNum;
                 }
                 else 
-                    highlight++;
-                break;
-            case GB_KEY_DOWN:
-                if (highlight == GameNum - 1) 
-                    highlight = 0;
-                else 
                     highlight--;
+                break;
+            case KEY_DOWN:
+                if (highlight == GameNum) 
+                    highlight = 1;
+                else 
+                    highlight++;
             default:
                 break;
         }
-        printMenu(gameBoyIO, highlight);
+        printMenu(mainWin, highlight);
     }
     getch();
     endwin();
     return 0;
 }
 
-void printMenu(GameBoyIO gameBoyIO, int highlight) {
+void printMenu(GB_WINDOW* gbWin, int highlight) {
     int rowNo = (MAIN_WIN_HIGHT - GameNum) / 2;
-    int columnNo = 2; 
-    GB_WINDOW* winLocate = gameBoyIO.gbGetWinLocate(MAIN_WIN);
+    int columnNo = 0; 
     for (int cnt = 0; cnt < GameNum; cnt++) {
         if (highlight == cnt + 1) {
-            gameBoyIO.gbPrint(winLocate, rowNo, columnNo, gameName[cnt], A_BOLD);
+            wattron(gbWin->win, A_BOLD);
+            mvwprintw(gbWin->win, rowNo, columnNo, "==>%s", gameName[cnt].c_str());
+            wattroff(gbWin->win, A_BOLD);
         }
         else 
-            gameBoyIO.gbPrint(winLocate, rowNo, columnNo, gameName[cnt]);
+            mvwprintw(gbWin->win, rowNo, columnNo, "   %s", gameName[cnt].c_str());
+        rowNo++;
     }
-    gameBoyIO.gbRefresh(winLocate);
+    wrefresh(gbWin->win);
 }
 
