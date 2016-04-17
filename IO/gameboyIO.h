@@ -47,13 +47,25 @@ typedef struct _GBWindowStruct {
 class GameBoyIO {
 
 public:
+    //http://stackoverflow.com/questions/270947/can-any-one-provide-me-a-sample-of-singleton-in-c/271104#271104
+    //the implement of singleton pattern using reference
     static GameBoyIO& getInstance() {
         static GameBoyIO instance;
         return instance;
     }
     void initGameBoy();
-    GB_WINDOW* getWinLocate(int winNum);
     void printGameBorder();
+    /*
+    print words to the screen
+     */
+    void printWords(int winNum, int startY, int startX, string words, attr_t attribute = A_NORMAL);
+    void refreshWin(int winNum);
+    /*
+    return the input key value
+     */
+    int getKeyValue();
+    void endGameBoy();
+
 
 private:
     GB_WINDOW *mainWin, *rtWin, *rbWin; 
@@ -62,6 +74,7 @@ private:
     GameBoyIO(GameBoyIO const&);
     void operator=(GameBoyIO const&);   
     GB_WINDOW* newWinLocate(int height, int width, int startY, int startX, int winNum);
+    GB_WINDOW* getWinLocate(int winNum);
 };
 
 #endif

@@ -10,21 +10,21 @@ string gameName[GameNum] = {
     "Tetris"
 };
 
-void printMenu(GB_WINDOW* gbWin, int highlight);
+void printMenu(int winNum, int highlight);
 
 int main(int argc, char const *argv[])
 {
     GameBoyIO::getInstance().initGameBoy();
     
     GameBoyIO::getInstance().printGameBorder();
-    GB_WINDOW* mainWin = GameBoyIO::getInstance().getWinLocate(MAIN_WIN);  
+
     int highlight = 1;
     int choice = 0;
-    printMenu(mainWin, highlight);
+    printMenu(MAIN_WIN, highlight);
     
     while(1) {
         GameBoyIO::getInstance().printGameBorder();
-        choice = wgetch(mainWin->win);
+        choice = GameBoyIO::getInstance().getKeyValue();
         switch(choice) {
             case KEY_UP:
                 if (highlight == 1) {
@@ -41,26 +41,23 @@ int main(int argc, char const *argv[])
             default:
                 break;
         }
-        printMenu(mainWin, highlight);
+        printMenu(MAIN_WIN, highlight);
     }
-    getch();
-    endwin();
+    GameBoyIO::getInstance().endGameBoy();
     return 0;
 }
 
-void printMenu(GB_WINDOW* gbWin, int highlight) {
+void printMenu(int winNum, int highlight) {
     int rowNo = (MAIN_WIN_HIGHT - GameNum) / 2;
     int columnNo = 0; 
     for (int cnt = 0; cnt < GameNum; cnt++) {
         if (highlight == cnt + 1) {
-            wattron(gbWin->win, A_BOLD);
-            mvwprintw(gbWin->win, rowNo, columnNo, "==>%s", gameName[cnt].c_str());
-            wattroff(gbWin->win, A_BOLD);
+            GameBoyIO::getInstance().printWords(winNum, rowNo, columnNo, "==>"+gameName[cnt], A_BOLD);
         }
         else 
-            mvwprintw(gbWin->win, rowNo, columnNo, "   %s", gameName[cnt].c_str());
+            GameBoyIO::getInstance().printWords(winNum, rowNo, columnNo, "   "+gameName[cnt]);
         rowNo++;
     }
-    wrefresh(gbWin->win);
+    GameBoyIO::getInstance().refreshWin(winNum);
 }
 

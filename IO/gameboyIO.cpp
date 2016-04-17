@@ -14,21 +14,6 @@ void GameBoyIO::initGameBoy() {
     keypad(mainWin->win, TRUE);
 }
 
-//http://stackoverflow.com/questions/27428071/return-a-struct-defined-in-a-separate-header-file-unknown-type-name
-//add a classname in front of the struct name
-GB_WINDOW* GameBoyIO::getWinLocate(int winNum) {
-    switch(winNum) {
-        case MAIN_WIN:
-            return mainWin;
-        case RIGHT_TOP_WIN:
-            return rtWin;
-        case RIGHT_BOTTOM_WIN:
-            return rbWin;
-        default:
-            return NULL;
-    }
-}
-
 
 void GameBoyIO::printGameBorder() {
     // show right bottom box
@@ -43,6 +28,32 @@ void GameBoyIO::printGameBorder() {
     wbs = mainWin->wbs;
     wborder(mainWin->win, wbs.ls, wbs.rs, wbs.ts, wbs.bs, wbs.tl, wbs.tr, wbs.bl, wbs.br);
     wrefresh(mainWin->win);
+}
+
+void GameBoyIO::printWords(int winNum, int startY, int startX, string words, attr_t attribute) {
+    GB_WINDOW* gbWin = getWinLocate(winNum);
+    if (attribute == A_NORMAL) {
+        mvwprintw(gbWin->win, startY, startX, "%s", words.c_str());
+    }
+    else {
+        wattron(gbWin->win, attribute);
+        mvwprintw(gbWin->win, startY, startX, "%s", words.c_str());
+        wattroff(gbWin->win, attribute);
+    }
+}
+
+void GameBoyIO::refreshWin(int winNum) {
+    GB_WINDOW* gbWin = getWinLocate(winNum);
+    wrefresh(gbWin->win);
+}
+
+
+int GameBoyIO::getKeyValue() {
+    return wgetch(mainWin->win);
+}
+
+void GameBoyIO::endGameBoy() {
+    endwin();
 }
 
 
@@ -68,3 +79,19 @@ GB_WINDOW* GameBoyIO::newWinLocate(int height, int width,
     }
     return winLocate;
 }
+
+//http://stackoverflow.com/questions/27428071/return-a-struct-defined-in-a-separate-header-file-unknown-type-name
+//add a classname in front of the struct name
+GB_WINDOW* GameBoyIO::getWinLocate(int winNum) {
+    switch(winNum) {
+        case MAIN_WIN:
+            return mainWin;
+        case RIGHT_TOP_WIN:
+            return rtWin;
+        case RIGHT_BOTTOM_WIN:
+            return rbWin;
+        default:
+            return NULL;
+    }
+}
+
