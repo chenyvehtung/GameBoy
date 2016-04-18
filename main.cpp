@@ -1,7 +1,8 @@
 #include <cstring>
 #include <sstream>
+#include <unistd.h> //for usleep
 #include "IO/gameboyIO.h"
-#include "IO/gameboyboard.h"
+#include "Tetris/tetrisboard.h"
 
 using std::string;
 using std::stringstream;
@@ -59,7 +60,8 @@ int main(int argc, char const *argv[])
             case 1:
                 //call tetris
                 {
-                GameBoyBoard* temp = new GameBoyBoard;
+                TetrisBoard* temp = new TetrisBoard(10);
+                usleep(5000000);
                 break;
                 }
             case 2:  //make it point to Exit
@@ -68,6 +70,8 @@ int main(int argc, char const *argv[])
             default:
                 break;
         }
+
+
 
         GameBoyIO::getInstance().printGameBorder();
         printMenu(MAIN_WIN, highlight);

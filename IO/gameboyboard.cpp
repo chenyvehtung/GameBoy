@@ -1,14 +1,7 @@
 #include "gameboyboard.h"
 
 GameBoyBoard::GameBoyBoard() {
-    initFilledBoard(MAIN_WIN, true, true, true, true);
-    initDisplayBoard(MAIN_WIN, BLOCK_RED);
-    initDisplayBoard(RIGHT_BOTTOM_WIN, BLOCK_RED);
-    gameScore = 0;
-    gameLevel = 1;
-    showDisplayBoard(RIGHT_BOTTOM_WIN);
-    showDisplayBoard(RIGHT_TOP_WIN);
-    showDisplayBoard(MAIN_WIN);
+
 }
 
 void GameBoyBoard::initFilledBoard(int winNum, bool ls, bool rs, bool ts, bool bs) {
@@ -72,7 +65,7 @@ void GameBoyBoard::showDisplayBoard(int winNum) {
             break;
         case RIGHT_BOTTOM_WIN:
             GameBoyIO::getInstance().printWords(winNum, 1, 1, "Next Block:", A_BOLD);
-            for (int row = 0; row < RIGHT_BOTTOM_GAME_BOARD_HEIGHT; row++) {
+            for (int row = 0; row < RIGHT_BOTTOM_GAME_BOARD_HEIGHT-1; row++) {
                 for (int column = 0; column < RIGHT_BOTTOM_GAME_BOARD_WIDTH; column++) {
                     int blockType = rbDisplayBoard[row][column];
                     GameBoyIO::getInstance().drawBlock(winNum, row + 2, 2*column-1, blockType);
@@ -88,6 +81,7 @@ void GameBoyBoard::showDisplayBoard(int winNum) {
         default:
             break;
     }
+    GameBoyIO::getInstance().printGameBorder();
     GameBoyIO::getInstance().refreshWin(winNum);
 }
 

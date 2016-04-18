@@ -1,39 +1,21 @@
 #ifndef TETRIS_BOARD_H_
 #define TETRIS_BOARD_H_
-
+#include "../IO/gameboyboard.h"
 #include "tetristype.h"
-#include "../IO/gameboyIO.h"
-#include <string>
 
-using std::string;
-
-
-class TetrisBoard {
-
+class TetrisBoard: public GameBoyBoard {
 public:
     TetrisBoard();
-    int** getGameBoard();
-    void moveBlock(int direction);
-    void downBlock();
-    void eraseAllLine();
+    TetrisBoard(int score);
 
 private:
-    void initBoard();
-    void getNextBlock();
-    void placeBlock(int offsetX, int offsetY, int kind, int rotation);
-    void filledBlock(int offsetX, int offsetY);
-    void clearBlock(int offsetX, int offsetY);
-    bool isPossibleMove();
-    void eraseLine(int rowNo);
-
-
     int blockKind, blockRotation;
-    int offsetX, offsetY;
     int nextBlockKind, nextBlockRotation;
-    int nextOffsetX, nextOffsetY;
-    int gameBoard[MAIN_GAME_BOARD_HEIGHT + 5][MAIN_GAME_BOARD_WIDTH + 5];
-    bool isFilled[MAIN_GAME_BOARD_HEIGHT + 5][MAIN_GAME_BOARD_WIDTH + 5];
+    int blockX, blockY;
     TetrisType tetrisBlock;
+
+    void initBoard(int score);
+    void placeBlock(int winNum, int offsetY, int offsetX, int kind, int rotation);
 
 };
 
