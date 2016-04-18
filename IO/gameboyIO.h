@@ -8,9 +8,23 @@ using std::string;
 #define MAIN_WIN 1
 #define RIGHT_TOP_WIN 2
 #define RIGHT_BOTTOM_WIN 3
+
 #define MAIN_WIN_HIGHT 20
 #define MAIN_WIN_WIDTH 40
-#define RIGHT_WIN_WIDTH 10
+#define RIGHT_WIN_HEIGHT (MAIN_WIN_HIGHT / 2)
+#define RIGHT_WIN_WIDTH 16
+
+
+#define MAIN_GAME_BOARD_HEIGHT (MAIN_WIN_HIGHT - 2)
+#define MAIN_GAME_BOARD_WIDTH (MAIN_WIN_WIDTH / 2 - 1)
+#define RIGHT_BOTTOM_GAME_BOARD_HEIGHT (RIGHT_WIN_HEIGHT - 2)
+#define RIGHT_BOTTOM_GAME_BOARD_WIDTH (RIGHT_WIN_WIDTH / 2 - 1)
+
+
+#define BLOCK_EMPTY 0
+#define BLOCK_BLUE 1
+#define BLOCK_CYAN 2
+#define BLOCK_RED 3
 
 /*
  * ls: character to be used for the left side of the window 
@@ -59,16 +73,19 @@ public:
     print words to the screen
      */
     void printWords(int winNum, int startY, int startX, string words, attr_t attribute = A_NORMAL);
+    void drawBlock(int winNum, int startY, int startX, int blockType);
     void refreshWin(int winNum);
     /*
-    return the input key value
+    return the input keyValue
      */
     int getKeyValue();
+    void setKeyValue(int kv);
     void endGameBoy();
 
 
 private:
     GB_WINDOW *mainWin, *rtWin, *rbWin; 
+    int keyValue;
     
     GameBoyIO(){}
     GameBoyIO(GameBoyIO const&);

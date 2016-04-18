@@ -4,24 +4,21 @@
 #include <cstdlib>
 
 TetrisBoard::TetrisBoard() {
-    setDisplayArg();
     initBoard();
 }
 
 void TetrisBoard::initBoard() {
-    //set game wall
-    for (int i = 0; i < DISPLAY_ARG["BOARD_HEIGHT"]; i++) {
-        for (int j = 0; j < DISPLAY_ARG["BOARD_WIDTH"]; j++) {
-            gameBoard[i][j] = DISPLAY_ARG["BOARD_SPACE"];
-            isFilled[i][j] = false;
-            if (j == DISPLAY_ARG["GAME_MARGIN"] || j == DISPLAY_ARG["GAME_MARGIN"] + DISPLAY_ARG["GAME_WIDTH"]) {
-                gameBoard[i][j] = DISPLAY_ARG["BOARD_WALL"];
-                isFilled[i][j] = true;
+
+    //setup game wall and initialize all block as empty
+    for (int row = 0; row <= MAIN_GAME_BOARD_HEIGHT; row++) {
+        for (int column = 0; column <= MAIN_GAME_BOARD_WIDTH; column++) {
+            gameBoard[row][column] = BLOCK_EMPTY;
+            isFilled[row][column] = false;
+            if (column == 0 || column == MAIN_GAME_BOARD_WIDTH) {
+                isFilled[row][column] = true;
             }
-            if (i == DISPLAY_ARG["BOARD_HEIGHT"] - 1 && 
-                j >= DISPLAY_ARG["GAME_MARGIN"] && j <= DISPLAY_ARG["GAME_MARGIN"] + DISPLAY_ARG["GAME_WIDTH"]) {
-                gameBoard[i][j] = DISPLAY_ARG["BOARD_WALL"];
-                isFilled[i][j] = true;
+            if (row == MAIN_GAME_BOARD_HEIGHT) {
+                isFilled[row][column] = true;
             }
         }
     }
@@ -29,16 +26,16 @@ void TetrisBoard::initBoard() {
     srand(time(NULL));
     blockKind = rand() % BLOCK_KIND;
     blockRotation = rand() % 4;
-    offsetX = 0; 
-    offsetY = DISPLAY_ARG["GAME_MARGIN"] + 1;
+    offsetX = 1; 
+    offsetY = 1;
     placeBlock(offsetX, offsetY, blockKind, blockRotation);
 
     nextBlockKind = rand() % BLOCK_KIND;
     nextBlockRotation = rand() % 4; 
-    nextOffsetX = 0;
-    nextOffsetY = 2*DISPLAY_ARG["GAME_MARGIN"] + DISPLAY_ARG["GAME_WIDTH"] + 1;
-    placeBlock(nextOffsetX, nextOffsetY, nextBlockKind, nextBlockRotation);
+
 }
+
+
 
 int** TetrisBoard::getGameBoard() {
     int** board2D = 0;
@@ -52,9 +49,6 @@ int** TetrisBoard::getGameBoard() {
     return board2D;
 }
 
-map<string, int> TetrisBoard::getDisplayArg() {
-    return DISPLAY_ARG;
-}
 
 
 void TetrisBoard::moveBlock(int direction) {
@@ -97,8 +91,8 @@ void TetrisBoard::placeBlock(int offsetX, int offsetY, int kind, int rotation) {
     for (int row = 0; row < 5; row++) {
         for (int column = 0; column < 5; column++) {
             int curBlock = tetrisBlock.getBlockType(kind, rotation, row, column);
-            if (!isFilled[row + offsetX][column + offsetY])
-                gameBoard[row + offsetX][column + offsetY] = curBlock;
+            if (!isFilled[row + offsetY][column + offsetX])
+                gameBoard[row + offsetY][column + offsetX] = curBlock;
         }
     }
 }

@@ -12,6 +12,11 @@ void GameBoyIO::initGameBoy() {
                         0, MAIN_WIN_WIDTH, RIGHT_TOP_WIN);
     mainWin = newWinLocate(MAIN_WIN_HIGHT, MAIN_WIN_WIDTH, 0, 0, MAIN_WIN);
     keypad(mainWin->win, TRUE);
+
+    start_color();
+    init_pair(BLOCK_BLUE, COLOR_BLUE, COLOR_BLACK);
+    init_pair(BLOCK_CYAN, COLOR_CYAN, COLOR_BLACK);
+    init_pair(BLOCK_RED, COLOR_RED, COLOR_BLACK);
 }
 
 
@@ -42,6 +47,25 @@ void GameBoyIO::printWords(int winNum, int startY, int startX, string words, att
     }
 }
 
+void GameBoyIO::drawBlock(int winNum, int startY, int startX, int blockType) {
+    switch(blockType) {
+        case BLOCK_EMPTY:
+            printWords(winNum, startY, startX, "  ");
+            break;
+        case BLOCK_BLUE:
+            printWords(winNum, startY, startX, "* ", COLOR_PAIR(BLOCK_BLUE));
+            break;
+        case BLOCK_CYAN:
+            printWords(winNum, startY, startX, "# ", COLOR_PAIR(BLOCK_CYAN));
+            break;
+        case BLOCK_RED:
+            printWords(winNum, startY, startX, "# ", COLOR_PAIR(BLOCK_RED));
+            break;
+        default:
+            break;
+    }
+}
+
 void GameBoyIO::refreshWin(int winNum) {
     GB_WINDOW* gbWin = getWinLocate(winNum);
     wrefresh(gbWin->win);
@@ -49,7 +73,12 @@ void GameBoyIO::refreshWin(int winNum) {
 
 
 int GameBoyIO::getKeyValue() {
-    return wgetch(mainWin->win);
+    keyValue = wgetch(mainWin->win);
+    return keyValue;
+}
+
+void GameBoyIO::setKeyValue(int kv) {
+    keyValue = kv;
 }
 
 void GameBoyIO::endGameBoy() {
