@@ -1,4 +1,7 @@
 #include "gameboyIO.h"
+#include <cstdio> //for getchar
+#include <termios.h>     //termios, TCSANOW, ECHO, ICANON
+#include <unistd.h>     //STDIN_FILENO
 
 void GameBoyIO::initGameBoy() {
     initscr();
@@ -17,6 +20,7 @@ void GameBoyIO::initGameBoy() {
     init_pair(BLOCK_BLUE, COLOR_BLUE, COLOR_BLACK);
     init_pair(BLOCK_CYAN, COLOR_CYAN, COLOR_BLACK);
     init_pair(BLOCK_RED, COLOR_RED, COLOR_BLACK);
+
 }
 
 
@@ -73,7 +77,9 @@ void GameBoyIO::refreshWin(int winNum) {
 
 
 int GameBoyIO::getKeyValue() {
-    keyValue = wgetch(mainWin->win);
+    int tempValue = wgetch(mainWin->win);
+    if (tempValue != -1) 
+        keyValue = tempValue;
     return keyValue;
 }
 
@@ -85,6 +91,9 @@ void GameBoyIO::endGameBoy() {
     endwin();
 }
 
+void GameBoyIO::setTimeout(int num) {
+    wtimeout(mainWin->win, num);
+}
 
 GB_WINDOW* GameBoyIO::newWinLocate(int height, int width, 
             int startY, int startX, int winNum) {
@@ -123,4 +132,5 @@ GB_WINDOW* GameBoyIO::getWinLocate(int winNum) {
             return NULL;
     }
 }
+
 

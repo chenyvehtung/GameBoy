@@ -8,12 +8,12 @@ void GameBoyBoard::initFilledBoard(int winNum, bool ls, bool rs, bool ts, bool b
     switch(winNum) {
         case MAIN_WIN:
             for (int row = 0; row <= MAIN_GAME_BOARD_HEIGHT; row++) {
-                for (int column = 0; column <= MAIN_GAME_BOARD_WIDTH; column++) {
+                for (int column = 0; column <= MAIN_GAME_BOARD_WIDTH+1; column++) {
                     mainFilledBoard[row][column] = false;
                     if (ls && column == 0) {
                         mainFilledBoard[row][column] = true;
                     }
-                    if (rs && column == MAIN_GAME_BOARD_WIDTH) {
+                    if (rs && column == MAIN_GAME_BOARD_WIDTH+1) {
                         mainFilledBoard[row][column] = true;
                     }
                     if (ts && row == 0) {
@@ -56,7 +56,7 @@ void GameBoyBoard::showDisplayBoard(int winNum) {
     switch(winNum) {
         case MAIN_WIN:
             for (int row = 0; row < MAIN_GAME_BOARD_HEIGHT; row++) {
-                for (int column = 1; column < MAIN_WIN_WIDTH; column++) {
+                for (int column = 1; column <= MAIN_GAME_BOARD_WIDTH; column++) {
                     int blockType = mainDisplayBoard[row][column];
                     //2*(column-1)+1
                    GameBoyIO::getInstance().drawBlock(winNum, row + 1, 2*column-1, blockType);
@@ -66,7 +66,7 @@ void GameBoyBoard::showDisplayBoard(int winNum) {
         case RIGHT_BOTTOM_WIN:
             GameBoyIO::getInstance().printWords(winNum, 1, 1, "Next Block:", A_BOLD);
             for (int row = 0; row < RIGHT_BOTTOM_GAME_BOARD_HEIGHT-1; row++) {
-                for (int column = 0; column < RIGHT_BOTTOM_GAME_BOARD_WIDTH; column++) {
+                for (int column = 0; column <= RIGHT_BOTTOM_GAME_BOARD_WIDTH; column++) {
                     int blockType = rbDisplayBoard[row][column];
                     GameBoyIO::getInstance().drawBlock(winNum, row + 2, 2*column-1, blockType);
                 }
@@ -85,3 +85,11 @@ void GameBoyBoard::showDisplayBoard(int winNum) {
     GameBoyIO::getInstance().refreshWin(winNum);
 }
 
+void GameBoyBoard::setGameLevel(int num) {
+    gameLevel = num;
+    GameBoyIO::getInstance().setTimeout(1000 - 100 * num);
+}
+
+int GameBoyBoard::getGameLevel() {
+    return gameLevel;
+}

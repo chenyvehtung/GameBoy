@@ -6,8 +6,8 @@ TetrisBoard::TetrisBoard() {
     initBoard(1);
 }
 
-TetrisBoard::TetrisBoard(int score) {
-    initBoard(score);
+TetrisBoard::TetrisBoard(int level) {
+    initBoard(level);
 }
 
 void TetrisBoard::moveBlock(int direction) {
@@ -61,11 +61,11 @@ void TetrisBoard::moveBlock(int direction) {
 
 void TetrisBoard::initBoard(int level) {
     initFilledBoard(MAIN_WIN, true, true, false, true);
-    initDisplayBoard(MAIN_WIN, BLOCK_RED);
+    initDisplayBoard(MAIN_WIN, BLOCK_EMPTY);
     initDisplayBoard(RIGHT_BOTTOM_WIN, BLOCK_EMPTY);
 
     gameScore = 0;
-    gameLevel = level;
+    setGameLevel(level);
 
     srand(time(NULL));
     blockKind = rand() % BLOCK_KIND;
@@ -81,6 +81,7 @@ void TetrisBoard::initBoard(int level) {
     showDisplayBoard(RIGHT_BOTTOM_WIN);
     showDisplayBoard(RIGHT_TOP_WIN);
     showDisplayBoard(MAIN_WIN);
+
 }
 
 
@@ -109,6 +110,7 @@ void TetrisBoard::filledBlock() {
         for (int column = 0; column < 5; column++) {
             if (mainDisplayBoard[row + blockY][column + blockX] != BLOCK_EMPTY) {
                 mainFilledBoard[row + blockY][column + blockX] = true;
+                mainDisplayBoard[row + blockY][column + blockX] = BLOCK_RED;
             }
         }
     }
@@ -137,8 +139,8 @@ bool TetrisBoard::isPossibleMove(int offsetY, int offsetX, int rotation) {
 }
 
 void TetrisBoard::eraseLine(int rowNum) {
-    for (int row = rowNum; row > 0; row++) {
-        for (int column = 1; column < MAIN_WIN_WIDTH; column++) {
+    for (int row = rowNum; row > 1; row--) {
+        for (int column = 1; column <= MAIN_GAME_BOARD_WIDTH; column++) {
             mainDisplayBoard[row][column] = mainDisplayBoard[row - 1][column];
             mainFilledBoard[row][column] = mainFilledBoard[row - 1][column];
         }
@@ -147,9 +149,9 @@ void TetrisBoard::eraseLine(int rowNum) {
 
 void TetrisBoard::eraseAllLine() {
     bool flag;
-    for (int row = 0; row < MAIN_GAME_BOARD_HEIGHT; row++) {
+    for (int row = 2; row < MAIN_GAME_BOARD_HEIGHT; row++) {
         flag = true;
-        for (int column = 1; column < MAIN_WIN_WIDTH; column++) {
+        for (int column = 1; column <= MAIN_GAME_BOARD_WIDTH; column++) {
             if (!mainFilledBoard[row][column]) {
                 flag = false;
                 break;

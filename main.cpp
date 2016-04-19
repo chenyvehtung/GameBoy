@@ -1,6 +1,8 @@
 #include <cstring>
 #include <sstream>
 #include <unistd.h> //for usleep
+#include <time.h>
+
 #include "IO/gameboyIO.h"
 #include "Tetris/tetris.h"
 
@@ -26,12 +28,13 @@ int main(int argc, char const *argv[])
     int keyValue = 0;
 
     GameBoyIO::getInstance().printGameBorder();
-    printMenu(MAIN_WIN, highlight);    
-        
+    printMenu(MAIN_WIN, highlight);
+  
     while(1) {
         int choice = -1;
         bool flag = false;
         keyValue = GameBoyIO::getInstance().getKeyValue();
+
         switch(keyValue) {
             case KEY_UP:
                 if (highlight == 0) {
@@ -71,8 +74,6 @@ int main(int argc, char const *argv[])
                 break;
         }
 
-
-
         GameBoyIO::getInstance().printGameBorder();
         printMenu(MAIN_WIN, highlight);
 
@@ -81,6 +82,7 @@ int main(int argc, char const *argv[])
         }
 
     }
+
     
     GameBoyIO::getInstance().endGameBoy();
     return 0;

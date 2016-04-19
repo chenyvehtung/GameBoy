@@ -11,7 +11,8 @@ public:
     void initFilledBoard(int winNum, bool ls, bool rs, bool ts, bool bs);
     void initDisplayBoard(int winNum, int type);
     void showDisplayBoard(int winNum);
-
+    void setGameLevel(int num);
+    int getGameLevel();
 
 
 protected:

@@ -82,6 +82,8 @@ public:
     void setKeyValue(int kv);
     void endGameBoy();
 
+    void setTimeout(int num);
+
 
 private:
     GB_WINDOW *mainWin, *rtWin, *rbWin; 
@@ -92,6 +94,9 @@ private:
     void operator=(GameBoyIO const&);   
     GB_WINDOW* newWinLocate(int height, int width, int startY, int startX, int winNum);
     GB_WINDOW* getWinLocate(int winNum);
+
+
+
 };
 
 #endif
