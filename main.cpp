@@ -2,7 +2,7 @@
 #include <sstream>
 #include <unistd.h> //for usleep
 #include "IO/gameboyIO.h"
-#include "Tetris/tetrisboard.h"
+#include "Tetris/tetris.h"
 
 using std::string;
 using std::stringstream;
@@ -60,8 +60,8 @@ int main(int argc, char const *argv[])
             case 1:
                 //call tetris
                 {
-                TetrisBoard* temp = new TetrisBoard(10);
-                usleep(5000000);
+                Tetris* tetris = new Tetris;
+                tetris->startGame();    
                 break;
                 }
             case 2:  //make it point to Exit
